@@ -1,12 +1,14 @@
 import express from 'express';
+import { connectDatabase } from './config/database';
 
 const app = express();
 const PORT = process.env.PORT || 5000;
+connectDatabase()
 
 app.use(express.json());
 
 app.get('/', (req, res) => {
-    res.send('Hello, MERN Stack with Express and TypeScript!');
+    res.send('Hello !');
 });
 
 app.listen(PORT, () => {
