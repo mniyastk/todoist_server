@@ -3,13 +3,9 @@ import path from 'path';
 import crypto from 'crypto';
 
 // Load environment variables
-dotenv.config({ 
-  path: path.resolve(process.cwd(), 
-    process.env.NODE_ENV === 'production' 
-      ? '.env.production' 
-      : '.env.development'
-  ) 
-});
+dotenv.config();
+
+
 
 export interface EnvironmentConfig {
   port: number;

@@ -2,6 +2,10 @@ import jwt from 'jsonwebtoken';
 import { Request, Response, NextFunction } from 'express';
 import { environmentConfig } from '../config/environment';
 
+export interface CustomRequest extends Request {
+  user?: TokenPayload;
+}
+
 export interface TokenPayload {
   userId: string;
   email: string;
@@ -9,13 +13,13 @@ export interface TokenPayload {
 
 export function generateAccessToken(payload: TokenPayload): string {
   return jwt.sign(payload, environmentConfig.jwtSecret, {
-    expiresIn: '1h' 
+    expiresIn: '1h',
   });
 }
 
 export function generateRefreshToken(payload: TokenPayload): string {
   return jwt.sign(payload, environmentConfig.jwtSecret, {
-    expiresIn: '7d' 
+    expiresIn: '7d',
   });
 }
 
@@ -28,22 +32,22 @@ export function verifyToken(token: string): TokenPayload {
 }
 
 export function authenticateToken(
-  req: Request, 
-  res: Response, 
+  req: CustomRequest,
+  res: Response,
   next: NextFunction
 ) {
   const authHeader = req.headers['authorization'];
   const token = authHeader && authHeader.split(' ')[1];
 
   if (token == null) {
-    return res.sendStatus(401); 
+    return res.sendStatus(401);
   }
 
   try {
     const decoded = verifyToken(token);
-    req.user = decoded;
+    req.user  = decoded;
     next();
   } catch (error) {
-    res.sendStatus(403); 
+    res.sendStatus(403);
   }
 }
