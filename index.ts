@@ -8,15 +8,9 @@ import { errorHandler } from './middlewares/errorMiddleware';
 import { userRouter } from './routes/userRoutes';
 import { projectRouter } from './routes/projectRoutes';
 import { taskRouter } from './routes/taskRoutes';
-import { log } from 'console';
-
-
-
-
 
 const app: Express = express();
 const PORT = process.env.PORT ||5000
-
 
 connectDatabase();
 
@@ -26,7 +20,7 @@ app.use(express.json());
 app.use(requestLogger);
 app.use(apiLimiter);
 
-// Mount the routers
+
 app.use('/api/users', userRouter);
 app.use('/api/projects', authenticateUser, projectRouter);
 app.use('/api/tasks', authenticateUser, taskRouter);
@@ -34,9 +28,7 @@ app.use('/api/tasks', authenticateUser, taskRouter);
 app.get('/', (req: Request, res: Response) => {
   res.send('Hello!');
 });
-
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
-
 app.use(errorHandler);
